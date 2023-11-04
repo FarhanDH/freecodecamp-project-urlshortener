@@ -2,7 +2,7 @@
     "name": "shorturl",
     "version": "0.0.3",
     "description": "API project for freeCodeCamp",
-    "main": "src/index.js",
+    "main": "index.js",
     "scripts": {
         "start": "node ./src/index.js",
         "start:dev": "nodemon ./src/index.js"
