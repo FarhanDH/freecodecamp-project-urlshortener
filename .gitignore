@@ -2,3 +2,4 @@
 .env
 sample.env
 node_modules/
+token-github.txt
