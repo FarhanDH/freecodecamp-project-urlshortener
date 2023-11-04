@@ -1,6 +1,5 @@
 const URL = require('../model/url');
 const dns = require('node:dns');
-const util = require('node:util');
 
 /**
  * Sends the index.html file as the response for the home route.
@@ -22,39 +21,37 @@ const home = async (req, res) => {
  */
 const newUrl = async (req, res) => {
     const url = req.body.url;
+    dns.lookup(url, async (err, address, family) => {
+        try {
+            if (url.includes('https://')) {
+                const findOne = await URL.findOne({ original_url: url });
+                const findAll = await URL.find();
 
-    try {
-        const lookup = util.promisify(dns.lookup);
-        const { address } = await lookup(url);
+                if (!findOne) {
+                    const newUrl = new URL({
+                        original_url: url,
+                        short_url: findAll.length + 1,
+                    });
+                    await newUrl.save();
 
-        if (url.includes('https://')) {
-            const findOne = await URL.findOne({ original_url: url });
-            const findAll = await URL.find();
-
-            if (!findOne) {
-                const newUrl = new URL({
-                    original_url: url,
-                    short_url: findAll.length + 1,
-                });
-                await newUrl.save();
-
-                res.json({
-                    original_url: newUrl.original_url,
-                    short_url: newUrl.short_url,
-                });
+                    res.json({
+                        original_url: newUrl.original_url,
+                        short_url: newUrl.short_url,
+                    });
+                } else {
+                    res.json({
+                        original_url: findOne.original_url,
+                        short_url: findOne.short_url,
+                    });
+                }
             } else {
-                res.json({
-                    original_url: findOne.original_url,
-                    short_url: findOne.short_url,
-                });
+                res.json({ error: 'invalid url' });
             }
-        } else {
-            res.json({ error: 'invalid url' });
+        } catch (error) {
+            console.error(error.message);
+            res.status(500).json('Server error');
         }
-    } catch (error) {
-        console.error(error.message);
-        res.status(500).json('Server error');
-    }
+    });
 };
 
 /**
