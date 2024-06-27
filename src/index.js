@@ -1,4 +1,4 @@
-require('dotenv').config({ path: 'sample.env' });
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const app = express();
@@ -13,7 +13,7 @@ const uri = db;
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use('/public', express.static(`${process.cwd()}/public`));
+app.use(express.static('public'));
 
 // route
 app.use('/', router);
@@ -21,3 +21,5 @@ app.use('/', router);
 app.listen(port, function () {
     console.log(`Listening on port ${port}`);
 });
+
+module.exports = app;

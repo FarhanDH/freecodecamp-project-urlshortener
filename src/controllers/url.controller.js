@@ -9,7 +9,7 @@ const dns = require('node:dns');
  * @return {undefined} The function does not return anything.
  */
 const home = async (req, res) => {
-    res.sendFile(process.cwd() + '/src/views/index.html');
+    res.sendFile(process.cwd() + '/views/index.html');
 };
 
 /**
