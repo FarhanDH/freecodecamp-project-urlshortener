@@ -13,13 +13,13 @@ const uri = db;
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(express.static('public'));
+app.use('/public', express.static(`${process.cwd()}/public`));
 
 // route
 app.use('/', router);
 
-app.listen(port, function () {
-    console.log(`Listening on port ${port}`);
+const listener = app.listen(3000, function () {
+    console.log('Your app is listening on port ' + listener.address().port);
 });
 
-module.exports = app;
+module.exports = app

@@ -1,5 +1,6 @@
 const URL = require('../model/url');
 const dns = require('node:dns');
+const path = require('path');
 
 /**
  * Sends the index.html file as the response for the home route.
@@ -9,7 +10,8 @@ const dns = require('node:dns');
  * @return {undefined} The function does not return anything.
  */
 const home = async (req, res) => {
-    res.sendFile(process.cwd() + '/views/index.html');
+    const indexPath = path.join(__dirname, '../../views/index.html');
+    res.sendFile(indexPath);
 };
 
 /**
